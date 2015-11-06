@@ -11,10 +11,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import main.Board;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 /**
  * @author MacBookAir
  *
@@ -22,14 +23,20 @@ import org.junit.Test;
 
 public class AlgorithmsTest {
 	public String fileName = "boards";
+
 	public void readFile() {
-		ArrayList<String> lines = new ArrayList<String>();
-		try(BufferedReader br = new BufferedReader(new FileReader(fileName))) {
-		    for(String line; (line = br.readLine()) != null; ) {
-		        
-		    	
-		    }
-		    // line is not visible here.
+		try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+			String line = br.readLine();
+			int numberOfBoards = Integer.parseInt(line);
+			for (int i = 1; i < numberOfBoards; i++) {
+				line = br.readLine();
+				String[] dimensions = line.split(" ");
+				int rows = Integer.parseInt(dimensions[0]);
+				int cols = Integer.parseInt(dimensions[1]);
+				Board b = new Board(rows, cols);
+				b.grid[0][1] = 0;
+			}
+			// line is not visible here.
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -38,12 +45,13 @@ public class AlgorithmsTest {
 			e.printStackTrace();
 		}
 	}
+
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@Before
 	public void setUp() throws Exception {
-		
+
 	}
 
 	/**

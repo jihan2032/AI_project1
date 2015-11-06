@@ -1,9 +1,14 @@
+package main;
 import java.lang.reflect.WildcardType;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
 import org.omg.CosNaming._BindingIteratorImplBase;
-
+/*
+ * x is the row
+ * y is the col
+ * 
+ * */
 public class Board {
   public Tile [][] grid;
   Tile ball;
