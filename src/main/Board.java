@@ -13,28 +13,29 @@ public class Board {
   public Tile [][] grid;
   Tile ball;
   Tile goal;
-  public int width;
-  public int height;
+  public int rows;
+  public int colums;
   int h1_value;
+  int h2_value;
   int a_star_value;
   int level;
 
   public Board(int x, int y){
-    width = x;
-    height = y;
+    rows = x;
+    colums = y;
     grid = new Tile[x][y];
   }
 
   public boolean outOfBounds (int x, int y) {
-    if (x < 0 || x > width || y < 0 || y > height)
+    if (x < 0 || x > rows || y < 0 || y > colums)
       return true;
     return false;
   }
 
   ArrayList<Tile> getBlanks() {
     ArrayList<Tile> all_blanks = new ArrayList<Tile>();
-    for(int i = 0; i < width; i++) {
-      for(int j = 0; j < height; j++) {
+    for(int i = 0; i < rows; i++) {
+      for(int j = 0; j < colums; j++) {
         if(grid[i][j].type == Tile.blank)
           all_blanks.add(grid[i][j]);
       }
@@ -43,11 +44,11 @@ public class Board {
   }
 
   Board after_move_board(Tile prev_pos, Tile blank) {
-    Board new_board = new Board(width, height);
-    new_board.grid = new Tile [width][height];
-    new_board.level = level + 1; 
-    for(int i = 0; i < width; i++) {
-      for(int j = 0; j < height; j++) {
+    Board new_board = new Board(rows, colums);
+    new_board.grid = new Tile [rows][colums];
+    new_board.level = level + 1;
+    for(int i = 0; i < rows; i++) {
+      for(int j = 0; j < colums; j++) {
         new_board.grid[i][j] = grid[i][j];
       }
     }
@@ -113,45 +114,46 @@ public class Board {
     }
     return possible_boards;
   }
-  
+
   public Tile getBallTile(){
-	for(int i = 0; i < width; i++){
-	  for(int j = 0; j < height; j++){
+	for(int i = 0; i < rows; i++){
+	  for(int j = 0; j < colums; j++){
 	      if(grid[i][j].getType() == Tile.ball_horizontal || grid[i][j].getType() == Tile.ball_vertical)
 	    	  return grid[i][j];
 	  }
 	}
 	return null;
   }
-  
+
   public Tile getGoalTile(){
-	for(int i = 0; i < width; i++){
-	  for(int j = 0; j < height; j++){
+	for(int i = 0; i < rows; i++){
+	  for(int j = 0; j < colums; j++){
 	      if(grid[i][j].getType() == Tile.goal_horizontal || grid[i][j].getType() == Tile.goal_vertical)
 	    	  return grid[i][j];
 	  }
 	}
 	return null;
   }
-  
+
   public void setH1Value() {
-	  int worst_case = width * height;
+	  int worst_case = rows * colums;
 	  h1_value = worst_case;
 	  Tile ball_tile = getBallTile();
 	  h1_value = worst_case - ball_tile.connected_path(null);
   }
-  
+
   public void setAStarValue() {
 	  a_star_value = level + path_to_goal(getBallTile().last_connected(null), getGoalTile());
-			  //.path_to_goal(null);
   }
   
+  public void setH2Value() {
+	  a_star_value = path_to_goal(getBallTile().last_connected(null), getGoalTile());
+  }
+
   public int path_to_goal(Tile start, Tile goal) {
 	  int path;
 	  int diff_rows = goal.x - start.x;
 	  int diff_cols = goal.y - start.y;
-	  int current_x;
-	  int current_y;
 	  if (diff_rows <= 0) {
 		// up left
 		if (diff_cols <= 0) {
@@ -160,7 +162,7 @@ public class Board {
 				if (grid[i][start.y].possible_north() != null)
 					path -= 1;
 			}
-			for (int i = start.y; i > goal.y; i++) {
+			for (int i = start.y; i > goal.y; i--) {
 				if (grid[goal.x][i].possible_west() != null)
 					path -= 1;
 			}
@@ -181,55 +183,45 @@ public class Board {
 	  else {
 		  // down left
 		  if (diff_cols <= 0) {
-			  path = (0 - diff_rows) + (0 - diff_cols) - 1;
-			  for (int i = start.x - 1; i > goal.x; i--) {
-				  if (grid[i][start.y].possible_north() != null)
+			  path = diff_rows + (0 - diff_cols) - 1;
+			  for (int i = start.x + 1; i < goal.x; i++) {
+				  if (grid[i][start.y].possible_south() != null)
 					  path -= 1;
 			  }
-			  for (int i = start.y; i > goal.y; i++) {
+			  for (int i = start.y; i > goal.y; i--) {
 				  if (grid[goal.x][i].possible_west() != null)
 					  path -= 1;
 			  }
-			  
+
 		  }
 		  // down right
 		  else {
-			  path = (0 - diff_rows) + (0 - diff_cols) - 1;
-			  for (int i = start.x - 1; i > goal.x; i--) {
-				  if (grid[i][start.y].possible_north() != null)
+			  path =  diff_rows + diff_cols - 1;
+			  for (int i = start.x + 1; i < goal.x; i++) {
+				  if (grid[i][start.y].possible_south() != null)
 					  path -= 1;
 			  }
-			  for (int i = start.y; i > goal.y; i++) {
+			  for (int i = start.y; i < goal.y; i++) {
 				  if (grid[goal.x][i].possible_west() != null)
 					  path -= 1;
 			  }
 		  }
 	  }
 	  return path;
-	  
+
   }
-  
+
   public boolean similar(Board other_board) {
-	  for(int i = 0; i < width; i++) {
-		  for(int j = 0; j < height; j++) {
+	  for(int i = 0; i < rows; i++) {
+		  for(int j = 0; j < colums; j++) {
 			  if (grid[i][j].getType() != other_board.grid[i][j].getType())
 				  return false;
 		  }
 	  }
 	  return true;
   }
-	
-  public static boolean isGoal(Tile tile, ArrayList<Tile> possible_tiles, ArrayList<Tile> taken) {
-		if(tile.getType() == Tile.goal_horizontal || tile.getType() == Tile.goal_vertical){
-			return true;
-		} else {
-			for( int i = 0; i < possible_tiles.size(); i++){
-				if (!taken.contains(possible_tiles.get(i))) {
-					taken.add(possible_tiles.get(i));
-					isGoal(possible_tiles.get(i), possible_tiles.get(i).around_tiles(), taken);
-				}
-			}
-			return false;
-		}
-	}
+
+  public boolean isGoal() {
+	return getBallTile().last_connected(null).isGoalTile();
+  }
 }

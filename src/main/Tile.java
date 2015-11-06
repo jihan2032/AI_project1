@@ -48,8 +48,8 @@ public class Tile {
     this.movable = movable;
   }
 
-  static boolean isGoalTile(Tile t) {
-	if(t.type == goal_horizontal || t.type == goal_vertical)
+  boolean isGoalTile() {
+	if(this.type == goal_horizontal || this.type == goal_vertical)
 	  return true;
 	return false;
   }
@@ -121,8 +121,8 @@ public class Tile {
   
   public int connected_path(Tile previous) {
 	  ArrayList<Tile> around = around_tiles();
-	  for (int i = 0; i < around.size(); i++) {
-		  if (previous != null && around.get(i).x == previous.x && around.get(i).y == previous.y)
+	  for (int i = 0; previous != null && i < around.size(); i++) {
+		  if (around.get(i).x == previous.x && around.get(i).y == previous.y)
 			  around.remove(i);
 	  }
 	  if (around.size() > 0) {
@@ -133,8 +133,8 @@ public class Tile {
   
   public Tile last_connected(Tile previous) {
 	  ArrayList<Tile> around = around_tiles();
-	  for (int i = 0; i < around.size(); i++) {
-		  if (previous != null && around.get(i).x == previous.x && around.get(i).y == previous.y)
+	  for (int i = 0; i < around.size() && previous != null; i++) {
+		  if (around.get(i).x == previous.x && around.get(i).y == previous.y)
 			  around.remove(i);
 	  }
 	  if (around.size() > 0) {

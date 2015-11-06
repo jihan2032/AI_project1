@@ -126,22 +126,35 @@ public class RollTheBall {
     return null;
   }
   
-  public String search(Board initial_board, int strategy, Boolean visualize) {
-	  String output = "";
+  public LinkedList<Board> search(Board initial_board, int strategy, Boolean visualize) {
+	  if (strategy == greedy_h1_strategy) {
+		  LinkedList<Board> original_board = new LinkedList<>();
+		  original_board.add(initial_board);
+		  return H1(new LinkedList<Board>(), original_board);
+	  }
 	  
 	  if (strategy == greedy_h2_strategy) {
 		  LinkedList<Board> original_board = new LinkedList<>();
 		  original_board.add(initial_board);
-		  LinkedList<Board> greedy_h1_output = H1(new LinkedList<Board>(), original_board);
+		  return H2(new LinkedList<Board>(), original_board);
 	  }
 	  
-	  return output;
+	  if (strategy == a_strategy) {
+		  LinkedList<Board> original_board = new LinkedList<>();
+		  original_board.add(initial_board);
+		  return admissible(new LinkedList<Board>(), original_board);
+	  }
+	  
+	  
+	  return null;
   }
 
   // H1 depends on the number of connected tiles from the goal
   public LinkedList<Board> H1(LinkedList<Board> output_sequence, LinkedList<Board> h1_queue) {
 	output_sequence.add(h1_queue.removeFirst());
 	Board current_board_shape = output_sequence.getLast();
+	if (current_board_shape.isGoal())
+		return output_sequence;
     LinkedList<Board> node_queue = current_board_shape.possibleMoves2();
     //remove repeated nodes
     //remove repeated from output
@@ -179,9 +192,11 @@ public class RollTheBall {
     return H1(output_sequence, h1_queue);
   }
   
-  public LinkedList<Board> addmissible(LinkedList<Board> output_sequence, LinkedList<Board> h1_queue) {
-	  output_sequence.add(h1_queue.removeFirst());
+  public LinkedList<Board> H2(LinkedList<Board> output_sequence, LinkedList<Board> h2_queue) {
+	  	output_sequence.add(h2_queue.removeFirst());
 		Board current_board_shape = output_sequence.getLast();
+		if (current_board_shape.isGoal())
+			return output_sequence;
 	    LinkedList<Board> node_queue = current_board_shape.possibleMoves2();
 	    //remove repeated nodes
 	    //remove repeated from output
@@ -193,44 +208,87 @@ public class RollTheBall {
 	    }
 	    //remove repeated from queue
 	    for (int i = 0; i < node_queue.size(); i ++) {
-	    	for (int j = 0; j < h1_queue.size(); j++) {
-	    		if (node_queue.get(i).similar(h1_queue.get(j)))
+	    	for (int j = 0; j < h2_queue.size(); j++) {
+	    		if (node_queue.get(i).similar(h2_queue.get(j)))
+	    			node_queue.remove(i);
+	    	}
+	    }
+		for(int i = 0; i < node_queue.size(); i++) {
+	    	Board node = node_queue.get(i);
+	    	node.setH2Value();
+	    	h2_queue.add(node);
+	    }
+	    if (h2_queue.isEmpty()) {
+	    	return output_sequence;
+	    }
+	    int min_h2_value = h2_queue.getFirst().h2_value;
+	    int min_board_index = 0;
+	    for (int i = 1; i < h2_queue.size(); i++) {
+	    	if (h2_queue.get(i).h2_value < min_h2_value ) {
+	    		min_h2_value = h2_queue.get(i).h2_value;
+	    		min_board_index = i;
+	    	}
+	    }
+	    h2_queue.addFirst(h2_queue.get(min_board_index));
+	    h2_queue.remove(min_board_index);
+	    return H2(output_sequence, h2_queue);
+}
+
+  
+  public LinkedList<Board> admissible(LinkedList<Board> output_sequence, LinkedList<Board> admiss_queue) {
+	  	output_sequence.add(admiss_queue.removeFirst());
+		Board current_board_shape = output_sequence.getLast();
+		if (current_board_shape.isGoal())
+			return output_sequence;
+	    LinkedList<Board> node_queue = current_board_shape.possibleMoves2();
+	    //remove repeated nodes
+	    //remove repeated from output
+	    for (int i = 0; i < node_queue.size(); i ++) {
+	    	for (int j = 0; j < output_sequence.size(); j++) {
+	    		if (node_queue.get(i).similar(output_sequence.get(j)))
+	    			node_queue.remove(i);
+	    	}
+	    }
+	    //remove repeated from queue
+	    for (int i = 0; i < node_queue.size(); i ++) {
+	    	for (int j = 0; j < admiss_queue.size(); j++) {
+	    		if (node_queue.get(i).similar(admiss_queue.get(j)))
 	    			node_queue.remove(i);
 	    	}
 	    }
 		for(int i = 0; i < node_queue.size(); i++) {
 	    	Board node = node_queue.get(i);
 	    	node.setAStarValue();
-	    	h1_queue.add(node);
+	    	admiss_queue.add(node);
 	    }
-	    if (h1_queue.isEmpty()) {
+	    if (admiss_queue.isEmpty()) {
 	    	return output_sequence;
 	    }
-	    int min_h1_value = h1_queue.getFirst().h1_value;
+	    int min_a_start_value = admiss_queue.getFirst().a_star_value;
 	    int min_board_index = 0;
-	    for (int i = 1; i < h1_queue.size(); i++) {
-	    	if (h1_queue.get(i).h1_value < min_h1_value ) {
-	    		min_h1_value = h1_queue.get(i).h1_value;
+	    for (int i = 1; i < admiss_queue.size(); i++) {
+	    	if (admiss_queue.get(i).a_star_value < min_a_start_value ) {
+	    		min_a_start_value = admiss_queue.get(i).a_star_value;
 	    		min_board_index = i;
 	    	}
 	    }
-	    h1_queue.addFirst(h1_queue.get(min_board_index));
-	    h1_queue.remove(min_board_index);
-	    return H1(output_sequence, h1_queue);
+	    admiss_queue.addFirst(admiss_queue.get(min_board_index));
+	    admiss_queue.remove(min_board_index);
+	    return admissible(output_sequence, admiss_queue);
   }
 
 
-  public int getLeastH1ValueIndex(LinkedList<Board> list) {
-	  int min = list.getFirst().h1_value;
-	  int best_board_index = 0;
-	  for (int i = 1; i < list.size(); i++) {
-		  if (list.get(i).h1_value < min) {
-			min = list.get(i).h1_value;
-			best_board_index = i;
-		  }
-	  }
-	  return best_board_index;
-  }
+//  public int getLeastH1ValueIndex(LinkedList<Board> list) {
+//	  int min = list.getFirst().h1_value;
+//	  int best_board_index = 0;
+//	  for (int i = 1; i < list.size(); i++) {
+//		  if (list.get(i).h1_value < min) {
+//			min = list.get(i).h1_value;
+//			best_board_index = i;
+//		  }
+//	  }
+//	  return best_board_index;
+//  }
   
   public static void main(String []args){
     genGrid(4, 4);
