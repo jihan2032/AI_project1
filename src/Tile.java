@@ -3,8 +3,8 @@ import java.util.ArrayList;
 public class Tile {
   int type; // path_buttom_right, path_buttom_left, path_top_right, path_top_left, path_horizontal, path_vertical, block, blank, goal_horizontal, goal_vertical, ball
   boolean movable;
-  int x;
-  int y;
+  int row;
+  int col;
   Board myBoard;
   final static int path_bottom_right = 0;
   final static int path_bottom_left = 1;
@@ -22,14 +22,14 @@ public class Tile {
   public Tile() {
 
   }
-  public Tile(Board b, int x, int y) {
+  public Tile(Board b, int row, int col) {
 	  myBoard = b;
-	  this.x = x;
-	  this.y = y;
+	  this.row = row;
+	  this.col = col;
   }
-  public Tile(int x, int y) {
-    this.x = x;
-    this.y = y;
+  public Tile(int row, int col) {
+    this.row = row;
+    this.col = col;
   }
   public int getType() {
     return type;
@@ -67,9 +67,9 @@ public class Tile {
   }
 
   public Tile possible_north() {
-    if (myBoard.outOfBounds(x, y + 1))
+    if (myBoard.outOfBounds(row, col + 1))
       return null;
-    Tile upwards = myBoard.grid[x][ y + 1];
+    Tile upwards = myBoard.grid[row + 1][ col ];
     if (this.type == path_horizontal || this.type == path_top_right || this.type == path_top_left) {
       return null;
     }
@@ -80,9 +80,9 @@ public class Tile {
   }
 
   public Tile possible_south() {
-    if (myBoard.outOfBounds(x, y - 1))
+    if (myBoard.outOfBounds(row -1, col ))
       return null;
-    Tile downwards = myBoard.grid[x][ y - 1];
+    Tile downwards = myBoard.grid[row - 1][ col];
     if (this.type == path_horizontal || this.type == path_bottom_right || this.type == path_bottom_left) {
       return null;
     }
@@ -93,9 +93,9 @@ public class Tile {
   }
 
   public Tile possible_east() {
-    if (myBoard.outOfBounds(x + 1, y))
+    if (myBoard.outOfBounds(row, col + 1))
       return null;
-    Tile east = myBoard.grid[x + 1][y];
+    Tile east = myBoard.grid[row][col + 1];
     if (this.type == path_vertical || this.type == path_top_right || this.type == path_bottom_right) {
       return null;
     }
@@ -106,9 +106,9 @@ public class Tile {
   }
 
   public Tile possible_west() {
-    if (myBoard.outOfBounds(x - 1, y))
+    if (myBoard.outOfBounds(row, col - 1))
       return null;
-    Tile west = myBoard.grid[x + 1][y];
+    Tile west = myBoard.grid[row][col -1];
     if (this.type == path_vertical || this.type == path_top_left || this.type == path_bottom_left) {
       return null;
     }
@@ -117,11 +117,11 @@ public class Tile {
     }
     return null;
   }
-  
+
   public int connected_path(Tile previous) {
 	  ArrayList<Tile> around = around_tiles();
 	  for (int i = 0; previous != null && i < around.size(); i++) {
-		  if (around.get(i).x == previous.x && around.get(i).y == previous.y)
+		  if (around.get(i).row == previous.row && around.get(i).col == previous.col)
 			  around.remove(i);
 	  }
 	  if (around.size() > 0) {
@@ -129,11 +129,11 @@ public class Tile {
 	  }
 	  return 0;
   }
-  
+
   public Tile last_connected(Tile previous) {
 	  ArrayList<Tile> around = around_tiles();
 	  for (int i = 0; i < around.size() && previous != null; i++) {
-		  if (around.get(i).x == previous.x && around.get(i).y == previous.y)
+		  if (around.get(i).row == previous.row && around.get(i).col == previous.col)
 			  around.remove(i);
 	  }
 	  if (around.size() > 0) {
