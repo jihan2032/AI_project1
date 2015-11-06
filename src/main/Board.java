@@ -11,14 +11,14 @@ import org.omg.CosNaming._BindingIteratorImplBase;
  * */
 public class Board {
   public Tile [][] grid;
-  Tile ball;
-  Tile goal;
+  public Tile ball;
+  public Tile goal;
   public int rows;
   public int colums;
-  int h1_value;
-  int h2_value;
-  int a_star_value;
-  int level;
+  public int h1_value;
+  public int h2_value;
+  public int a_star_value;
+  public int level;
 
   public Board(int rows, int cols){
     this.rows = rows;
