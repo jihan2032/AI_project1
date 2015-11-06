@@ -11,6 +11,7 @@ public class Board {
   public int rows;
   public int colums;
   int h1_value;
+  int h2_value;
   int a_star_value;
   int level;
 
@@ -138,7 +139,10 @@ public class Board {
 
   public void setAStarValue() {
 	  a_star_value = level + path_to_goal(getBallTile().last_connected(null), getGoalTile());
-			  //.path_to_goal(null);
+  }
+  
+  public void setH2Value() {
+	  a_star_value = path_to_goal(getBallTile().last_connected(null), getGoalTile());
   }
 
   public int path_to_goal(Tile start, Tile goal) {
@@ -188,11 +192,11 @@ public class Board {
 		  // down right
 		  else {
 			  path =  diff_rows + diff_cols - 1;
-			  for (int i = start.x + 1; i > goal.x; i++) {
-				  if (grid[i][start.y].possible_north() != null)
+			  for (int i = start.x + 1; i < goal.x; i++) {
+				  if (grid[i][start.y].possible_south() != null)
 					  path -= 1;
 			  }
-			  for (int i = start.y; i > goal.y; i++) {
+			  for (int i = start.y; i < goal.y; i++) {
 				  if (grid[goal.x][i].possible_west() != null)
 					  path -= 1;
 			  }
