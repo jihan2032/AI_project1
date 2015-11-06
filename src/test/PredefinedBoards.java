@@ -24,7 +24,7 @@ import org.junit.Test;
  *
  */
 
-public class DFSStrategy {
+public class PredefinedBoards {
 	public String fileName = "boards";
 	public Board[] boards;
 	public RollTheBall[] algorithmsContainers;
@@ -85,7 +85,7 @@ public class DFSStrategy {
 	}
 
 	
-	@Test(/*timeout=10000*/)
+	@Test(timeout=10000)
 	public void testGreedyH1() {
 		for (int i = 0; i < algorithmsContainers.length; i++) {
 			RollTheBall algorithmContainer = algorithmsContainers[i];
@@ -99,7 +99,7 @@ public class DFSStrategy {
 		assert true;
 	}
 	
-	@Test(/*timeout=10000*/)
+	@Test(timeout=10000)
 	public void testGreedyH2() {
 		for (int i = 0; i < algorithmsContainers.length; i++) {
 			RollTheBall algorithmContainer = algorithmsContainers[i];
@@ -113,7 +113,7 @@ public class DFSStrategy {
 		assert true;
 	}
 	
-	@Test(/*timeout=10000*/)
+	@Test(timeout=10000)
 	public void testAStar() {
 		for (int i = 0; i < algorithmsContainers.length; i++) {
 			RollTheBall algorithmContainer = algorithmsContainers[i];
@@ -130,7 +130,7 @@ public class DFSStrategy {
 		}
 		assert true;
 	}
-	@Test
+	@Test(timeout=10000)
 	public void testBFS() {
 		for (int i = 0; i < algorithmsContainers.length; i++) {
 			RollTheBall algorithmContainer = algorithmsContainers[i];
@@ -147,12 +147,28 @@ public class DFSStrategy {
 		}
 	}
 	
-	@Test
+	@Test(timeout=10000)
 	public void testDFS() {
 		for (int i = 0; i < algorithmsContainers.length; i++) {
 			RollTheBall algorithmContainer = algorithmsContainers[i];
 			LinkedList<Board> resultBoards = algorithmContainer.search(boards[i], RollTheBall.dfs_strategy, false);
 			System.out.println("DFS - " + i);
+			System.out.println(boards[i]);
+			for (int j = 0; j < resultBoards.size(); j++) {
+				System.out.println(j);
+				System.out.println(resultBoards.get(j));
+			}
+			System.out.println();
+			System.out.println("============================");
+			assert true;
+		}
+	}
+	@Test(timeout=10000)
+	public void testIterative() {
+		for (int i = 0; i < algorithmsContainers.length; i++) {
+			RollTheBall algorithmContainer = algorithmsContainers[i];
+			LinkedList<Board> resultBoards = algorithmContainer.search(boards[i], RollTheBall.iterative_strategy, false);
+			System.out.println("Iterative - " + i);
 			System.out.println(boards[i]);
 			for (int j = 0; j < resultBoards.size(); j++) {
 				System.out.println(j);
