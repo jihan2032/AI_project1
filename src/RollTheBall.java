@@ -147,6 +147,18 @@ public class RollTheBall {
 		  return admissible(new LinkedList<Board>(), original_board);
 	  }
 	  
+	  if (strategy == dfs_strategy) {
+		  LinkedList<Board> original_board = new LinkedList<>();
+		  original_board.add(initial_board);
+		  return DFS_search(new LinkedList<Board>(), original_board);
+	  }
+	  
+	  if (strategy == bfs_strategy) {
+		  LinkedList<Board> original_board = new LinkedList<>();
+		  original_board.add(initial_board);
+		  return BFS_search(new LinkedList<Board>(), original_board);
+	  }
+	  
 	  return null;
   }
   
@@ -339,19 +351,6 @@ public class RollTheBall {
 	    admiss_queue.remove(min_board_index);
 	    return admissible(output_sequence, admiss_queue);
   }
-
-
-//  public int getLeastH1ValueIndex(LinkedList<Board> list) {
-//	  int min = list.getFirst().h1_value;
-//	  int best_board_index = 0;
-//	  for (int i = 1; i < list.size(); i++) {
-//		  if (list.get(i).h1_value < min) {
-//			min = list.get(i).h1_value;
-//			best_board_index = i;
-//		  }
-//	  }
-//	  return best_board_index;
-//  }
   
   public static void main(String []args){
     genGrid(4, 4);
