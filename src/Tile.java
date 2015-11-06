@@ -18,7 +18,9 @@ public class Tile {
   final static int goal_vertical = 9;
   final static int ball = 10;
 
+  public Tile() {
 
+  }
   public Tile(int x, int y) {
     this.x = x;
     this.y = y;
@@ -38,7 +40,7 @@ public class Tile {
   public void setMovable(boolean movable) {
     this.movable = movable;
   }
-  
+
   static boolean isGoalTile(Tile t) {
 	if(t.type == goal_horizontal || t.type == goal_vertical)
 	  return true;

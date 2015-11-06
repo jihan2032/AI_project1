@@ -6,7 +6,13 @@ public class Board {
   Tile goal;
   public int width;
   public int height;
-  
+
+  public Board(int x, int y){
+    width = x;
+    height = y;
+    grid = new Tile[x][y];
+  }
+
   public boolean outOfBounds (int x, int y) {
     if (x < 0 || x > width || y < 0 || y > height)
       return true;
@@ -23,7 +29,7 @@ public class Board {
     }
     return all_blanks;
   }
-  
+
   Board after_move_board(Tile prev_pos, Tile blank) {
     Board new_board = new Board();
     new_board.height = height;
@@ -38,7 +44,7 @@ public class Board {
     new_board.grid[blank.x][blank.y] = grid[prev_pos.x][prev_pos.y];
     return new_board;
   }
-  
+
   public ArrayList<Board> possible_moves(Board current_board) {
     ArrayList<Board> possible_boards = new ArrayList<Board>();
     for (int i = 0; i < getBlanks().size(); i++) {
