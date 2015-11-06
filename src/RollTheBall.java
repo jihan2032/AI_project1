@@ -24,9 +24,9 @@ public class RollTheBall {
     random2 = (int)(Math.random() * n);
     board.grid[random][random2] = new Tile(board, random, random2);
     if(random < random2)
-      board.grid[random][random2].setType(8);
+      board.grid[random][random2].setType(Tile.goal_vertical);
     else
-      board.grid[random][random2].setType(9);
+      board.grid[random][random2].setType(Tile.goal_horizontal);
 
     //adding the ball
     random3 = (int)(Math.random() * m);
@@ -35,14 +35,17 @@ public class RollTheBall {
       random3 = (int)(Math.random() * m);
       random4 = (int)(Math.random() * n);
     }
-    board.grid[random][random2] = new Tile();
-    board.grid[random][random2].setType(10);
+    board.grid[random3][random4] = new Tile(board, random3, random4);
+    if(random3 < random4)
+        board.grid[random3][random4].setType(Tile.ball_horizontal);
+    else
+        board.grid[random3][random4].setType(Tile.ball_vertical);
 
     int counter = 0;
     for(int i = 0; i < m; i++){
       for(int j = 0; j < n; j++){
         if(board.grid[i][j] == null){
-        board.grid[i][j] = new Tile();
+        board.grid[i][j] = new Tile(board, i , j);
         random = (int)(Math.random() * 7);
         board.grid[i][j].setType(random);
         if(counter % 4 == 0)
@@ -144,9 +147,70 @@ public class RollTheBall {
 		  return admissible(new LinkedList<Board>(), original_board);
 	  }
 	  
-	  
 	  return null;
   }
+  
+  public LinkedList<Board> BFS_search(LinkedList<Board> output_sequence, LinkedList<Board> bfs_queue) {
+		output_sequence.add(bfs_queue.removeFirst());
+		Board current_board_shape = output_sequence.getLast();
+		if (current_board_shape.isGoal())
+			return output_sequence;
+	    LinkedList<Board> node_queue = current_board_shape.possibleMoves2();
+	    //remove repeated nodes
+	    //remove repeated from output
+	    for (int i = 0; i < node_queue.size(); i ++) {
+	    	for (int j = 0; j < output_sequence.size(); j++) {
+	    		if (node_queue.get(i).similar(output_sequence.get(j)))
+	    			node_queue.remove(i);
+	    	}
+	    }
+	    //remove repeated from queue
+	    for (int i = 0; i < node_queue.size(); i ++) {
+	    	for (int j = 0; j < bfs_queue.size(); j++) {
+	    		if (node_queue.get(i).similar(bfs_queue.get(j)))
+	    			node_queue.remove(i);
+	    	}
+	    }
+		for(int i = 0; i < node_queue.size(); i++) {
+	    	Board node = node_queue.get(i);
+	    	bfs_queue.add(node);
+	    }
+	    if (bfs_queue.isEmpty()) {
+	    	return output_sequence;
+	    }
+	    return BFS_search(output_sequence, bfs_queue);
+  }
+  
+  public LinkedList<Board> DFS_search(LinkedList<Board> output_sequence, LinkedList<Board> dfs_queue) {
+		output_sequence.add(dfs_queue.removeFirst());
+		Board current_board_shape = output_sequence.getLast();
+		if (current_board_shape.isGoal())
+			return output_sequence;
+	    LinkedList<Board> node_queue = current_board_shape.possibleMoves2();
+	    //remove repeated nodes
+	    //remove repeated from output
+	    for (int i = 0; i < node_queue.size(); i ++) {
+	    	for (int j = 0; j < output_sequence.size(); j++) {
+	    		if (node_queue.get(i).similar(output_sequence.get(j)))
+	    			node_queue.remove(i);
+	    	}
+	    }
+	    //remove repeated from queue
+	    for (int i = 0; i < node_queue.size(); i ++) {
+	    	for (int j = 0; j < dfs_queue.size(); j++) {
+	    		if (node_queue.get(i).similar(dfs_queue.get(j)))
+	    			node_queue.remove(i);
+	    	}
+	    }
+		for(int i = 0; i < node_queue.size(); i++) {
+	    	Board node = node_queue.get(i);
+	    	dfs_queue.addFirst(node);
+	    }
+	    if (dfs_queue.isEmpty()) {
+	    	return output_sequence;
+	    }
+	    return DFS_search(output_sequence, dfs_queue);
+}
 
   // H1 depends on the number of connected tiles from the goal
   public LinkedList<Board> H1(LinkedList<Board> output_sequence, LinkedList<Board> h1_queue) {
