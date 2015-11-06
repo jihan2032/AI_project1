@@ -1,15 +1,17 @@
+package main;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Stack;
 
 public class RollTheBall {
 
-  static Board board; //initial board
-  static final int dfs_strategy = 1;
-  static final int bfs_strategy = 2;
-  static final int greedy_h1_strategy = 3;
-  static final int greedy_h2_strategy = 4;  
-  static final int a_strategy = 5;
+  public static Board board; //initial board
+  public static final int dfs_strategy = 1;
+  public static final int bfs_strategy = 2;
+  public static final int greedy_h1_strategy = 3;
+  public static final int greedy_h2_strategy = 4;  
+  public static final int a_strategy = 5;
 
   public RollTheBall(Board board) {
     this.board = board;
