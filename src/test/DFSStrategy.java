@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import main.Board;
 import main.RollTheBall;
@@ -33,6 +34,7 @@ public class DFSStrategy {
 		try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
 			String line = br.readLine();
 			int numberOfBoards = Integer.parseInt(line);
+//			int numberOfBoards = 1;
 			boards = new Board[numberOfBoards];
 			for (int i = 0; i < numberOfBoards; i++) {
 				line = br.readLine();
@@ -115,38 +117,50 @@ public class DFSStrategy {
 	public void testAStar() {
 		for (int i = 0; i < algorithmsContainers.length; i++) {
 			RollTheBall algorithmContainer = algorithmsContainers[i];
-			Board resultBoard = algorithmContainer.search(boards[i], RollTheBall.a_strategy, false).getLast();
+			LinkedList<Board> resultBoards = algorithmContainer.search(boards[i], RollTheBall.a_strategy, false);
 			System.out.println("A star - " + i);
-			System.out.println(resultBoard);
+			System.out.println(boards[i]);
+			for (int j = 0; j < resultBoards.size(); j++) {
+				System.out.println(j);
+				System.out.println(resultBoards.get(j));
+			}
 			System.out.println();
 			System.out.println("============================");
 			assert true;
 		}
 		assert true;
 	}
-//	@Test
-//	public void testBFS() {
-//		for (int i = 0; i < algorithmsContainers.length; i++) {
-//			RollTheBall algorithmContainer = algorithmsContainers[i];
-//			Board resultBoard = algorithmContainer.search(boards[i], RollTheBall.bfs_strategy, false);
-//			System.out.println("BFS - " + i);
-//			System.out.println(resultBoard);
-//			System.out.println();
-//			System.out.println("============================");
-//			assert true;
-//		}
-//	}
-//	
-//	@Test
-//	public void testDFS() {
-//		for (int i = 0; i < algorithmsContainers.length; i++) {
-//			RollTheBall algorithmContainer = algorithmsContainers[i];
-//			Board resultBoard = algorithmContainer.search(boards[i], RollTheBall.dfs_strategy, false);
-//			System.out.println("DFS - " + i);
-//			System.out.println(resultBoard);
-//			System.out.println();
-//			System.out.println("============================");
-//			assert true;
-//		}
-//	}
+	@Test
+	public void testBFS() {
+		for (int i = 0; i < algorithmsContainers.length; i++) {
+			RollTheBall algorithmContainer = algorithmsContainers[i];
+			LinkedList<Board> resultBoards = algorithmContainer.search(boards[i], RollTheBall.bfs_strategy, false);
+			System.out.println("BFS - " + i);
+			System.out.println(boards[i]);
+			for (int j = 0; j < resultBoards.size(); j++) {
+				System.out.println(j);
+				System.out.println(resultBoards.get(j));
+			}
+			System.out.println();
+			System.out.println("============================");
+			assert true;
+		}
+	}
+	
+	@Test
+	public void testDFS() {
+		for (int i = 0; i < algorithmsContainers.length; i++) {
+			RollTheBall algorithmContainer = algorithmsContainers[i];
+			LinkedList<Board> resultBoards = algorithmContainer.search(boards[i], RollTheBall.dfs_strategy, false);
+			System.out.println("DFS - " + i);
+			System.out.println(boards[i]);
+			for (int j = 0; j < resultBoards.size(); j++) {
+				System.out.println(j);
+				System.out.println(resultBoards.get(j));
+			}
+			System.out.println();
+			System.out.println("============================");
+			assert true;
+		}
+	}
 }

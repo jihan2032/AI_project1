@@ -172,17 +172,19 @@ public class RollTheBall {
 	    LinkedList<Board> node_queue = current_board_shape.possibleMoves2();
 	    //remove repeated nodes
 	    //remove repeated from output
-	    for (int i = 0; i < node_queue.size(); i ++) {
+	    LinkedList<Board> node_queue_copy = new LinkedList<>(node_queue);
+	    for (int i = 0; i < node_queue_copy.size(); i ++) {
 	    	for (int j = 0; j < output_sequence.size() && !node_queue.isEmpty(); j++) {
-	    		if (node_queue.get(i).similar(output_sequence.get(j)))
-	    			node_queue.remove(i);
+	    		if (node_queue_copy.get(i).similar(output_sequence.get(j)))
+	    			node_queue.remove(node_queue_copy.get(i));
 	    	}
 	    }
 	    //remove repeated from queue
-	    for (int i = 0; i < node_queue.size(); i ++) {
+	    node_queue_copy = new LinkedList<>(node_queue);
+	    for (int i = 0; i < node_queue_copy.size(); i ++) {
 	    	for (int j = 0; j < bfs_queue.size() && !node_queue.isEmpty(); j++) {
-	    		if (node_queue.get(i).similar(bfs_queue.get(j)))
-	    			node_queue.remove(i);
+	    		if (node_queue_copy.get(i).similar(bfs_queue.get(j)))
+	    			node_queue.remove(node_queue_copy.get(i));
 	    	}
 	    }
 		for(int i = 0; i < node_queue.size(); i++) {
@@ -229,6 +231,7 @@ public class RollTheBall {
 	    }
 	    return iterative(output_sequence, itr_queue, index + 1);
   }
+  
   public LinkedList<Board> DFS_search(LinkedList<Board> output_sequence, LinkedList<Board> dfs_queue) {
 		output_sequence.add(dfs_queue.removeFirst());
 		Board current_board_shape = output_sequence.getLast();
@@ -237,17 +240,19 @@ public class RollTheBall {
 	    LinkedList<Board> node_queue = current_board_shape.possibleMoves2();
 	    //remove repeated nodes
 	    //remove repeated from output
-	    for (int i = 0; i < node_queue.size(); i ++) {
+	    LinkedList<Board> node_queue_copy = new LinkedList<>(node_queue);
+	    for (int i = 0; i < node_queue_copy.size(); i ++) {
 	    	for (int j = 0; j < output_sequence.size() && !node_queue.isEmpty(); j++) {
-	    		if (node_queue.get(i).similar(output_sequence.get(j)))
-	    			node_queue.remove(i);
+	    		if (node_queue_copy.get(i).similar(output_sequence.get(j)))
+	    			node_queue.remove(node_queue_copy.get(i));
 	    	}
 	    }
 	    //remove repeated from queue
-	    for (int i = 0; i < node_queue.size(); i ++) {
+	    node_queue_copy = new LinkedList<>(node_queue);
+	    for (int i = 0; i < node_queue_copy.size(); i ++) {
 	    	for (int j = 0; j < dfs_queue.size() && !node_queue.isEmpty(); j++) {
-	    		if (node_queue.get(i).similar(dfs_queue.get(j)))
-	    			node_queue.remove(i);
+	    		if (node_queue_copy.get(i).similar(dfs_queue.get(j)))
+	    			node_queue.remove(node_queue_copy.get(i));
 	    	}
 	    }
 		for(int i = 0; i < node_queue.size(); i++) {
@@ -269,17 +274,19 @@ public class RollTheBall {
     LinkedList<Board> node_queue = current_board_shape.possibleMoves2();
     //remove repeated nodes
     //remove repeated from output
-    for (int i = 0; i < node_queue.size(); i ++) {
+    LinkedList<Board> node_queue_copy = new LinkedList<>(node_queue);
+    for (int i = 0; i < node_queue_copy.size(); i ++) {
     	for (int j = 0; j < output_sequence.size() && !node_queue.isEmpty(); j++) {
-    		if (node_queue.get(i).similar(output_sequence.get(j)))
-    			node_queue.remove(i);
+    		if (node_queue_copy.get(i).similar(output_sequence.get(j)))
+    			node_queue.remove(node_queue_copy.get(i));
     	}
     }
     //remove repeated from queue
-    for (int i = 0; i < node_queue.size(); i ++) {
+    node_queue_copy = new LinkedList<>(node_queue);
+    for (int i = 0; i < node_queue_copy.size(); i ++) {
     	for (int j = 0; j < h1_queue.size() && !node_queue.isEmpty(); j++) {
-    		if (node_queue.get(i).similar(h1_queue.get(j)))
-    			node_queue.remove(i);
+    		if (node_queue_copy.get(i).similar(h1_queue.get(j)))
+    			node_queue.remove(node_queue_copy.get(i));
     	}
     }
 	for(int i = 0; i < node_queue.size(); i++) {
@@ -311,17 +318,19 @@ public class RollTheBall {
 	    LinkedList<Board> node_queue = current_board_shape.possibleMoves2();
 	    //remove repeated nodes
 	    //remove repeated from output
-	    for (int i = 0; i < node_queue.size(); i ++) {
+	    LinkedList<Board> node_queue_copy = new LinkedList<>(node_queue);
+	    for (int i = 0; i < node_queue_copy.size(); i ++) {
 	    	for (int j = 0; j < output_sequence.size() && !node_queue.isEmpty(); j++) {
-	    		if (node_queue.get(i).similar(output_sequence.get(j)))
-	    			node_queue.remove(i);
+	    		if (node_queue_copy.get(i).similar(output_sequence.get(j)))
+	    			node_queue.remove(node_queue_copy.get(i));
 	    	}
 	    }
+	    node_queue_copy = new LinkedList<>(node_queue);
 	    //remove repeated from queue
-	    for (int i = 0; i < node_queue.size(); i ++) {
-	    	for (int j = 0; j < h2_queue.size() && !node_queue.isEmpty(); j++) {
-	    		if (node_queue.get(i).similar(h2_queue.get(j)))
-	    			node_queue.remove(i);
+	    for (int i = 0; i < node_queue_copy.size(); i ++) {
+	    	for (int j = 0; j < h2_queue.size(); j++) {
+	    		if (node_queue_copy.get(i).similar(h2_queue.get(j)))
+	    			node_queue.remove(node_queue_copy.get(i));
 	    	}
 	    }
 		for(int i = 0; i < node_queue.size(); i++) {
@@ -354,17 +363,19 @@ public class RollTheBall {
 	    LinkedList<Board> node_queue = current_board_shape.possibleMoves2();
 	    //remove repeated nodes
 	    //remove repeated from output
-	    for (int i = 0; i < node_queue.size(); i ++) {
-	    	for (int j = 0; j < output_sequence.size() && !node_queue.isEmpty(); j++) {
-	    		if (node_queue.get(i).similar(output_sequence.get(j)))
-	    			node_queue.remove(i);
+	    LinkedList<Board> node_queue_copy = new LinkedList<>(node_queue);
+	    for (int i = 0; i < node_queue_copy.size(); i ++) {
+	    	for (int j = 0; j < output_sequence.size(); j++) {
+	    		if (node_queue_copy.get(i).similar(output_sequence.get(j)))
+	    			node_queue.remove(node_queue_copy.get(i));
 	    	}
 	    }
+	    node_queue_copy = new LinkedList<>(node_queue);
 	    //remove repeated from queue
-	    for (int i = 0; i < node_queue.size(); i ++) {
-	    	for (int j = 0; j < admiss_queue.size() && !node_queue.isEmpty(); j++) {
-	    		if (node_queue.get(i).similar(admiss_queue.get(j)))
-	    			node_queue.remove(i);
+	    for (int i = 0; i < node_queue_copy.size(); i ++) {
+	    	for (int j = 0; j < admiss_queue.size(); j++) {
+	    		if (node_queue_copy.get(i).similar(admiss_queue.get(j)))
+	    			node_queue.remove(node_queue_copy.get(i));
 	    	}
 	    }
 		for(int i = 0; i < node_queue.size(); i++) {

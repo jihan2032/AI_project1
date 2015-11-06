@@ -27,7 +27,7 @@ public class Board {
   }
   
   public boolean outOfBounds (int x, int y) {
-	  System.out.print(x + " , " + y);
+//	  System.out.print(x + " , " + y);
 	  if (x < 0 || x >= rows || y < 0 || y >= colums){
 //		  System.out.println(" out of bounds");
 		  return true;
@@ -53,11 +53,19 @@ public class Board {
     new_board.level = level + 1;
     for(int i = 0; i < rows; i++) {
       for(int j = 0; j < colums; j++) {
-        new_board.grid[i][j] = grid[i][j];
+        new_board.grid[i][j] = new Tile(new_board, i, j);
+        new_board.grid[i][j].setType(grid[i][j].getType());
+        new_board.grid[i][j].setMovable(grid[i][j].isMovable());
+
       }
     }
-    new_board.grid[prev_pos.row][prev_pos.col] = grid[blank.row][blank.col];
-    new_board.grid[blank.row][blank.col] = grid[prev_pos.row][prev_pos.col];
+    
+    new_board.grid[blank.row][blank.col].setType(prev_pos.getType()); 
+    new_board.grid[blank.row][blank.col].setMovable(prev_pos.isMovable()); 
+
+    new_board.grid[prev_pos.row][prev_pos.col].setType(Tile.blank);
+    new_board.grid[prev_pos.row][prev_pos.col].setMovable(false);
+
     return new_board;
   }
 
@@ -147,7 +155,12 @@ public class Board {
   }
 
   public void setAStarValue() {
+	  try{
 	  a_star_value = level + path_to_goal(getBallTile().last_connected(null), getGoalTile());
+	  }catch(Exception e) {
+		  e.printStackTrace();
+		  e.equals(e);
+	  }
   }
 
   public void setH2Value() {
