@@ -47,8 +47,8 @@ public class Tile {
     this.movable = movable;
   }
 
-  static boolean isGoalTile(Tile t) {
-	if(t.type == goal_horizontal || t.type == goal_vertical)
+  boolean isGoalTile() {
+	if(this.type == goal_horizontal || this.type == goal_vertical)
 	  return true;
 	return false;
   }

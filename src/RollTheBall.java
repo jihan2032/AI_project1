@@ -152,6 +152,8 @@ public class RollTheBall {
   public LinkedList<Board> H1(LinkedList<Board> output_sequence, LinkedList<Board> h1_queue) {
 	output_sequence.add(h1_queue.removeFirst());
 	Board current_board_shape = output_sequence.getLast();
+	if (current_board_shape.isGoal())
+		return output_sequence;
     LinkedList<Board> node_queue = current_board_shape.possibleMoves2();
     //remove repeated nodes
     //remove repeated from output
@@ -192,6 +194,8 @@ public class RollTheBall {
   public LinkedList<Board> H2(LinkedList<Board> output_sequence, LinkedList<Board> h2_queue) {
 	  	output_sequence.add(h2_queue.removeFirst());
 		Board current_board_shape = output_sequence.getLast();
+		if (current_board_shape.isGoal())
+			return output_sequence;
 	    LinkedList<Board> node_queue = current_board_shape.possibleMoves2();
 	    //remove repeated nodes
 	    //remove repeated from output
@@ -233,6 +237,8 @@ public class RollTheBall {
   public LinkedList<Board> admissible(LinkedList<Board> output_sequence, LinkedList<Board> admiss_queue) {
 	  	output_sequence.add(admiss_queue.removeFirst());
 		Board current_board_shape = output_sequence.getLast();
+		if (current_board_shape.isGoal())
+			return output_sequence;
 	    LinkedList<Board> node_queue = current_board_shape.possibleMoves2();
 	    //remove repeated nodes
 	    //remove repeated from output
