@@ -142,13 +142,28 @@ public class RollTheBall {
 	output_sequence.add(h1_queue.removeFirst());
 	Board current_board_shape = output_sequence.getLast();
     LinkedList<Board> node_queue = current_board_shape.possibleMoves2();
-    if (node_queue.size() == 0) {
-    	return output_sequence;
+    //remove repeated nodes
+    //remove repeated from output
+    for (int i = 0; i < node_queue.size(); i ++) {
+    	for (int j = 0; j < output_sequence.size(); j++) {
+    		if (node_queue.get(i).similar(output_sequence.get(j)))
+    			node_queue.remove(i);
+    	}
     }
-    for(int i = 0; i < node_queue.size(); i++) {
+    //remove repeated from queue
+    for (int i = 0; i < node_queue.size(); i ++) {
+    	for (int j = 0; j < h1_queue.size(); j++) {
+    		if (node_queue.get(i).similar(h1_queue.get(j)))
+    			node_queue.remove(i);
+    	}
+    }
+	for(int i = 0; i < node_queue.size(); i++) {
     	Board node = node_queue.get(i);
     	node.setH1Value();
     	h1_queue.add(node);
+    }
+    if (h1_queue.isEmpty()) {
+    	return output_sequence;
     }
     int min_h1_value = h1_queue.getFirst().h1_value;
     int min_board_index = 0;

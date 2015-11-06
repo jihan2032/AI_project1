@@ -122,7 +122,17 @@ public class Board {
 	  h1_value = worst_case - ball_tile.connected_path(null);
   }
   
-	public static boolean isGoal(Tile tile, ArrayList<Tile> possible_tiles, ArrayList<Tile> taken) {
+  public boolean similar(Board other_board) {
+	  for(int i = 0; i < width; i++) {
+		  for(int j = 0; j < height; j++) {
+			  if (grid[i][j].getType() != other_board.grid[i][j].getType())
+				  return false;
+		  }
+	  }
+	  return true;
+  }
+	
+  public static boolean isGoal(Tile tile, ArrayList<Tile> possible_tiles, ArrayList<Tile> taken) {
 		if(tile.getType() == Tile.goal_horizontal || tile.getType() == Tile.goal_vertical){
 			return true;
 		} else {
