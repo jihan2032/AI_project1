@@ -109,7 +109,7 @@ public class Tile {
   public Tile possible_west() {
     if (myBoard.outOfBounds(x - 1, y))
       return null;
-    Tile west = myBoard.grid[x + 1][y];
+    Tile west = myBoard.grid[x - 1][y];
     if (this.type == path_vertical || this.type == path_top_left || this.type == path_bottom_left) {
       return null;
     }
@@ -141,6 +141,9 @@ public class Tile {
 		  return around.get(0).last_connected(this);
 	  }
 	  return this;
+  }
+  public String toString() {
+	  return String.format("%02d", type) + (movable?'m':'s');
   }
 
 }

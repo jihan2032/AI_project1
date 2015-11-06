@@ -20,16 +20,21 @@ public class Board {
   int a_star_value;
   int level;
 
-  public Board(int x, int y){
-    rows = x;
-    colums = y;
-    grid = new Tile[x][y];
+  public Board(int rows, int cols){
+    this.rows = rows;
+    this.colums = cols;
+    grid = new Tile[rows][cols];
   }
 
   public boolean outOfBounds (int x, int y) {
-    if (x < 0 || x > rows || y < 0 || y > colums)
-      return true;
-    return false;
+	  System.out.print(x + " , " + y);
+	  if (x < 0 || x >= rows || y < 0 || y >= colums){
+//		  System.out.println(" out of bounds");
+		  return true;
+	  }
+//	  System.out.println(" NOT out of bounds");
+      return false;
+    
   }
 
   ArrayList<Tile> getBlanks() {
@@ -90,26 +95,26 @@ public class Board {
 	  LinkedList<Board> possible_boards = new LinkedList<Board>();
     for (int i = 0; i < getBlanks().size(); i++) {
       Tile current_blank = getBlanks().get(i);
-      Tile target;
+      try {
       // north
-      target = grid[current_blank.x][current_blank.y + 1];
-      if (outOfBounds(current_blank.x, current_blank.y + 1) && target.isMovable()) {
-        possible_boards.add(after_move_board(target, current_blank));
+      if (!outOfBounds(current_blank.x, current_blank.y + 1) && grid[current_blank.x][current_blank.y + 1].isMovable()) {
+        possible_boards.add(after_move_board(grid[current_blank.x][current_blank.y + 1], current_blank));
       }
       // south
-      target = grid[current_blank.x][current_blank.y - 1];
-      if (outOfBounds(current_blank.x, current_blank.y - 1) && target.isMovable()) {
-        possible_boards.add(after_move_board(target, current_blank));
+      if (!outOfBounds(current_blank.x, current_blank.y - 1) && grid[current_blank.x][current_blank.y - 1].isMovable()) {
+        possible_boards.add(after_move_board(grid[current_blank.x][current_blank.y - 1], current_blank));
       }
       // east
-      target = grid[current_blank.x + 1][current_blank.y];
-      if (outOfBounds(current_blank.x + 1, current_blank.y) && target.isMovable()) {
-        possible_boards.add(after_move_board(target, current_blank));
+      if (!outOfBounds(current_blank.x + 1, current_blank.y) && grid[current_blank.x + 1][current_blank.y].isMovable()) {
+        possible_boards.add(after_move_board(grid[current_blank.x + 1][current_blank.y], current_blank));
       }
       // west
-      target = grid[current_blank.x - 1][current_blank.y];
-      if (outOfBounds(current_blank.x - 1, current_blank.y) && target.isMovable()) {
-        possible_boards.add(after_move_board(target, current_blank));
+      if (!outOfBounds(current_blank.x - 1, current_blank.y) && grid[current_blank.x - 1][current_blank.y].isMovable()) {
+        possible_boards.add(after_move_board(grid[current_blank.x - 1][current_blank.y], current_blank));
+      }
+      }catch(Exception e) {
+    	  e.printStackTrace();
+    	  e.equals(e);
       }
     }
     return possible_boards;
@@ -223,5 +228,16 @@ public class Board {
 
   public boolean isGoal() {
 	return getBallTile().last_connected(null).isGoalTile();
+  }
+  @Override
+  public String toString() {
+	  String result = "";
+	  for (int i = 0; i < grid.length; i++) {
+		for(int j =0; j< grid[i].length; j++) {
+			result += grid[i][j].toString() + " ";
+		}
+		result += "\n";
+	}
+	  return result;
   }
 }

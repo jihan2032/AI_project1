@@ -26,6 +26,7 @@ import org.junit.Test;
 public class DFSStrategy {
 	public String fileName = "boards";
 	public Board[] boards;
+	public RollTheBall[] algorithmsContainers;
 	
 	public Board[] readFile() {
 		Board[] boards = new Board[0];
@@ -33,7 +34,7 @@ public class DFSStrategy {
 			String line = br.readLine();
 			int numberOfBoards = Integer.parseInt(line);
 			boards = new Board[numberOfBoards];
-			for (int i = 1; i < numberOfBoards; i++) {
+			for (int i = 0; i < numberOfBoards; i++) {
 				line = br.readLine();
 				String[] dimensions = line.split(" ");
 				int rows = Integer.parseInt(dimensions[0]);
@@ -68,6 +69,10 @@ public class DFSStrategy {
 	@Before
 	public void setUp() throws Exception {
 		boards = readFile();
+		algorithmsContainers = new RollTheBall[boards.length];
+		for (int i = 0; i < algorithmsContainers.length; i++) {
+			algorithmsContainers[i] = new RollTheBall(boards[i]);
+		}
 	}
 
 	/**
@@ -77,18 +82,71 @@ public class DFSStrategy {
 	public void tearDown() throws Exception {
 	}
 
-	@Test
-	public void testAStar() {
-		
-	}
 	
-	@Test
+	@Test(/*timeout=10000*/)
 	public void testGreedyH1() {
-		
+		for (int i = 0; i < algorithmsContainers.length; i++) {
+			RollTheBall algorithmContainer = algorithmsContainers[i];
+			Board resultBoard = algorithmContainer.search(boards[i], RollTheBall.greedy_h1_strategy, false).getLast();
+			System.out.println("Greedy H1 - " + i);
+			System.out.println(resultBoard);
+			System.out.println();
+			System.out.println("============================");
+			assert true;
+		}
+		assert true;
 	}
 	
-	@Test
+	@Test(/*timeout=10000*/)
 	public void testGreedyH2() {
-		
+		for (int i = 0; i < algorithmsContainers.length; i++) {
+			RollTheBall algorithmContainer = algorithmsContainers[i];
+			Board resultBoard = algorithmContainer.search(boards[i], RollTheBall.greedy_h2_strategy, false).getLast();
+			System.out.println("Greedy H2 - " + i);
+			System.out.println(resultBoard);
+			System.out.println();
+			System.out.println("============================");
+			assert true;
+		}
+		assert true;
 	}
+	
+	@Test(/*timeout=10000*/)
+	public void testAStar() {
+		for (int i = 0; i < algorithmsContainers.length; i++) {
+			RollTheBall algorithmContainer = algorithmsContainers[i];
+			Board resultBoard = algorithmContainer.search(boards[i], RollTheBall.a_strategy, false).getLast();
+			System.out.println("A star - " + i);
+			System.out.println(resultBoard);
+			System.out.println();
+			System.out.println("============================");
+			assert true;
+		}
+		assert true;
+	}
+//	@Test
+//	public void testBFS() {
+//		for (int i = 0; i < algorithmsContainers.length; i++) {
+//			RollTheBall algorithmContainer = algorithmsContainers[i];
+//			Board resultBoard = algorithmContainer.search(boards[i], RollTheBall.bfs_strategy, false);
+//			System.out.println("BFS - " + i);
+//			System.out.println(resultBoard);
+//			System.out.println();
+//			System.out.println("============================");
+//			assert true;
+//		}
+//	}
+//	
+//	@Test
+//	public void testDFS() {
+//		for (int i = 0; i < algorithmsContainers.length; i++) {
+//			RollTheBall algorithmContainer = algorithmsContainers[i];
+//			Board resultBoard = algorithmContainer.search(boards[i], RollTheBall.dfs_strategy, false);
+//			System.out.println("DFS - " + i);
+//			System.out.println(resultBoard);
+//			System.out.println();
+//			System.out.println("============================");
+//			assert true;
+//		}
+//	}
 }
