@@ -2,6 +2,8 @@ import java.lang.reflect.WildcardType;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import org.omg.CosNaming._BindingIteratorImplBase;
+
 public class Board {
   public Tile [][] grid;
   Tile ball;
@@ -9,6 +11,8 @@ public class Board {
   public int width;
   public int height;
   int h1_value;
+  int a_star_value;
+  int level;
 
   public Board(int x, int y){
     width = x;
@@ -36,6 +40,7 @@ public class Board {
   Board after_move_board(Tile prev_pos, Tile blank) {
     Board new_board = new Board(width, height);
     new_board.grid = new Tile [width][height];
+    new_board.level = level + 1; 
     for(int i = 0; i < width; i++) {
       for(int j = 0; j < height; j++) {
         new_board.grid[i][j] = grid[i][j];
@@ -120,6 +125,10 @@ public class Board {
 	  h1_value = worst_case;
 	  Tile ball_tile = getBallTile();
 	  h1_value = worst_case - ball_tile.connected_path(null);
+  }
+  
+  public void setAStarValue() {
+	  
   }
   
   public boolean similar(Board other_board) {

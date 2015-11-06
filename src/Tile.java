@@ -123,5 +123,24 @@ public class Tile {
 	  }
 	  return 0;
   }
+  
+  public Tile last_connected(Tile start) {
+	  ArrayList<Tile> around = around_tiles();
+	  for (int i = 0; i < around.size(); i++) {
+		  if (start != null && around.get(i).x == start.x && around.get(i).y == start.y)
+			  around.remove(i);
+	  }
+	  if (around.size() > 0) {
+		  return around.get(0).last_connected(this);
+	  }
+	  return this;
+  }
+  
+  public int path_to_goal(Tile previous) {
+	  int path = 0;
+	  
+	  return path;
+	  
+  }
 
 }
