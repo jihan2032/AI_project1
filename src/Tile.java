@@ -111,5 +111,17 @@ public class Tile {
     }
     return null;
   }
+  
+  public int connected_path(Tile previous) {
+	  ArrayList<Tile> around = around_tiles();
+	  for (int i = 0; i < around.size(); i++) {
+		  if (previous != null && around.get(i).x == previous.x && around.get(i).y == previous.y)
+			  around.remove(i);
+	  }
+	  if (around.size() > 0) {
+		  return 1 + around.get(0).connected_path(this);
+	  }
+	  return 0;
+  }
 
 }

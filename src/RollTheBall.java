@@ -4,8 +4,16 @@ import java.util.Stack;
 
 public class RollTheBall {
 
-  static Board board;
+  static Board board; //initial board
+  static final int dfs_strategy = 1;
+  static final int bfs_strategy = 2;
+  static final int greedy_h1_strategy = 3;
+  static final int greedy_h2_strategy = 4;  
+  static final int a_strategy = 5;
 
+  public RollTheBall(Board board) {
+    this.board = board;
+  }
 
   public static void genGrid(int m, int n){
     board = new Board(m, n);
@@ -45,8 +53,18 @@ public class RollTheBall {
     }
   }
 
+  public static Tile getBallTile(){
+    for(int i = 0; i < board.grid.length; i++){
+      for(int j = 0; j < board.grid[i].length; j++){
+        if(board.grid[i][j].getType() == Tile.ball)
+          return board.grid[i][j];
+      }
+    }
+    return null;
+  }
+
   public Board BFS(){
-    ArrayList<Board> possible_moves = new ArrayList<Board>(); //= board.possibleMoves();
+    ArrayList<Board> possible_moves = board.possibleMoves();
     LinkedList<Board> linked_list = new LinkedList<Board>();
 
     //adding current possible moves to the linked list
@@ -72,18 +90,8 @@ public class RollTheBall {
     return null;
   }
 
-  public static Tile getBallTile(){
-    for(int i = 0; i < board.grid.length; i++){
-      for(int j = 0; j < board.grid[i].length; j++){
-        if(board.grid[i][j].getType() == 10)
-          return board.grid[i][j];
-      }
-    }
-    return null;
-  }
-
-  public Board DSF(){
-    ArrayList<Board> possible_moves = new ArrayList<Board>(); //= board.possibleMoves();
+  public Board DSF() {
+    ArrayList<Board> possible_moves = board.possibleMoves();
     LinkedList<Board> linked_list = new LinkedList<Board>();
 
     //adding current possible moves to the linked list
@@ -116,7 +124,57 @@ public class RollTheBall {
 
     return null;
   }
+  
+  public String search(Board initial_board, int strategy, Boolean visualize) {
+	  String output = "";
+	  
+	  if (strategy == greedy_h2_strategy) {
+		  LinkedList<Board> original_board = new LinkedList<>();
+		  original_board.add(initial_board);
+		  LinkedList<Board> greedy_h1_output = H1(new LinkedList<Board>(), original_board);
+	  }
+	  
+	  return output;
+  }
 
+  // H1 depends on the number of connected tiles from the goal
+  public LinkedList<Board> H1(LinkedList<Board> output_sequence, LinkedList<Board> h1_queue) {
+	output_sequence.add(h1_queue.removeFirst());
+	Board current_board_shape = output_sequence.getLast();
+    LinkedList<Board> node_queue = current_board_shape.possibleMoves2();
+    if (node_queue.size() == 0) {
+    	return output_sequence;
+    }
+    for(int i = 0; i < node_queue.size(); i++) {
+    	Board node = node_queue.get(i);
+    	node.setH1Value();
+    	h1_queue.add(node);
+    }
+    int min_h1_value = h1_queue.getFirst().h1_value;
+    int min_board_index = 0;
+    for (int i = 1; i < h1_queue.size(); i++) {
+    	if (h1_queue.get(i).h1_value < min_h1_value ) {
+    		min_h1_value = h1_queue.get(i).h1_value;
+    		min_board_index = i;
+    	}
+    }
+    h1_queue.addFirst(h1_queue.get(min_board_index));
+    h1_queue.remove(min_board_index);
+    return H1(output_sequence, h1_queue);
+  }
+
+  public int getLeastH1ValueIndex(LinkedList<Board> list) {
+	  int min = list.getFirst().h1_value;
+	  int best_board_index = 0;
+	  for (int i = 1; i < list.size(); i++) {
+		  if (list.get(i).h1_value < min) {
+			min = list.get(i).h1_value;
+			best_board_index = i;
+		  }
+	  }
+	  return best_board_index;
+  }
+  
   public static void main(String []args){
     genGrid(4, 4);
     for(int i = 0; i < board.grid.length; i++){
