@@ -22,7 +22,7 @@ public class RollTheBall {
     //adding goal state
     random = (int)(Math.random() * m);
     random2 = (int)(Math.random() * n);
-    board.grid[random][random2] = new Tile();
+    board.grid[random][random2] = new Tile(board, random, random2);
     if(random < random2)
       board.grid[random][random2].setType(8);
     else
@@ -56,7 +56,7 @@ public class RollTheBall {
   public static Tile getBallTile(){
     for(int i = 0; i < board.grid.length; i++){
       for(int j = 0; j < board.grid[i].length; j++){
-        if(board.grid[i][j].getType() == Tile.ball)
+        if(board.grid[i][j].getType() == Tile.ball_horizontal || board.grid[i][j].getType() == Tile.ball_vertical)
           return board.grid[i][j];
       }
     }
@@ -177,6 +177,47 @@ public class RollTheBall {
     h1_queue.remove(min_board_index);
     return H1(output_sequence, h1_queue);
   }
+  
+  public LinkedList<Board> addmissible(LinkedList<Board> output_sequence, LinkedList<Board> h1_queue) {
+	  output_sequence.add(h1_queue.removeFirst());
+		Board current_board_shape = output_sequence.getLast();
+	    LinkedList<Board> node_queue = current_board_shape.possibleMoves2();
+	    //remove repeated nodes
+	    //remove repeated from output
+	    for (int i = 0; i < node_queue.size(); i ++) {
+	    	for (int j = 0; j < output_sequence.size(); j++) {
+	    		if (node_queue.get(i).similar(output_sequence.get(j)))
+	    			node_queue.remove(i);
+	    	}
+	    }
+	    //remove repeated from queue
+	    for (int i = 0; i < node_queue.size(); i ++) {
+	    	for (int j = 0; j < h1_queue.size(); j++) {
+	    		if (node_queue.get(i).similar(h1_queue.get(j)))
+	    			node_queue.remove(i);
+	    	}
+	    }
+		for(int i = 0; i < node_queue.size(); i++) {
+	    	Board node = node_queue.get(i);
+	    	node.setAStarValue();
+	    	h1_queue.add(node);
+	    }
+	    if (h1_queue.isEmpty()) {
+	    	return output_sequence;
+	    }
+	    int min_h1_value = h1_queue.getFirst().h1_value;
+	    int min_board_index = 0;
+	    for (int i = 1; i < h1_queue.size(); i++) {
+	    	if (h1_queue.get(i).h1_value < min_h1_value ) {
+	    		min_h1_value = h1_queue.get(i).h1_value;
+	    		min_board_index = i;
+	    	}
+	    }
+	    h1_queue.addFirst(h1_queue.get(min_board_index));
+	    h1_queue.remove(min_board_index);
+	    return H1(output_sequence, h1_queue);
+  }
+
 
   public int getLeastH1ValueIndex(LinkedList<Board> list) {
 	  int min = list.getFirst().h1_value;
