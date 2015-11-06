@@ -125,16 +125,27 @@ public class RollTheBall {
     return null;
   }
   
-  public String search(Board initial_board, int strategy, Boolean visualize) {
-	  String output = "";
+  public LinkedList<Board> search(Board initial_board, int strategy, Boolean visualize) {
+	  if (strategy == greedy_h1_strategy) {
+		  LinkedList<Board> original_board = new LinkedList<>();
+		  original_board.add(initial_board);
+		  return H1(new LinkedList<Board>(), original_board);
+	  }
 	  
 	  if (strategy == greedy_h2_strategy) {
 		  LinkedList<Board> original_board = new LinkedList<>();
 		  original_board.add(initial_board);
-		  LinkedList<Board> greedy_h1_output = H1(new LinkedList<Board>(), original_board);
+		  return H2(new LinkedList<Board>(), original_board);
 	  }
 	  
-	  return output;
+	  if (strategy == a_strategy) {
+		  LinkedList<Board> original_board = new LinkedList<>();
+		  original_board.add(initial_board);
+		  return admissible(new LinkedList<Board>(), original_board);
+	  }
+	  
+	  
+	  return null;
   }
 
   // H1 depends on the number of connected tiles from the goal
