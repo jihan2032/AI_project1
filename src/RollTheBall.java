@@ -22,7 +22,7 @@ public class RollTheBall {
     //adding goal state
     random = (int)(Math.random() * m);
     random2 = (int)(Math.random() * n);
-    board.grid[random][random2] = new Tile();
+    board.grid[random][random2] = new Tile(board, random, random2);
     if(random < random2)
       board.grid[random][random2].setType(8);
     else
@@ -56,7 +56,7 @@ public class RollTheBall {
   public static Tile getBallTile(){
     for(int i = 0; i < board.grid.length; i++){
       for(int j = 0; j < board.grid[i].length; j++){
-        if(board.grid[i][j].getType() == Tile.ball)
+        if(board.grid[i][j].getType() == Tile.ball_horizontal || board.grid[i][j].getType() == Tile.ball_vertical)
           return board.grid[i][j];
       }
     }

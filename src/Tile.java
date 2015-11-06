@@ -16,10 +16,16 @@ public class Tile {
   final static int blank = 7;
   final static int goal_horizontal = 8;
   final static int goal_vertical = 9;
-  final static int ball = 10;
+  final static int ball_horizontal = 10;
+  final static int ball_vertical = 11;
 
   public Tile() {
 
+  }
+  public Tile(Board b, int x, int y) {
+	  myBoard = b;
+	  this.x = x;
+	  this.y = y;
   }
   public Tile(int x, int y) {
     this.x = x;
@@ -32,7 +38,7 @@ public class Tile {
     this.type = type;
   }
   public boolean isMovable() {
-    if (this.type == block || this.type == goal_horizontal || this.type == goal_vertical || this.type == ball) {
+    if (this.type == block || this.type == goal_horizontal || this.type == goal_vertical || this.type == ball_horizontal || this.type == ball_vertical) {
       return false;
     }
     return movable;
@@ -124,23 +130,16 @@ public class Tile {
 	  return 0;
   }
   
-  public Tile last_connected(Tile start) {
+  public Tile last_connected(Tile previous) {
 	  ArrayList<Tile> around = around_tiles();
 	  for (int i = 0; i < around.size(); i++) {
-		  if (start != null && around.get(i).x == start.x && around.get(i).y == start.y)
+		  if (previous != null && around.get(i).x == previous.x && around.get(i).y == previous.y)
 			  around.remove(i);
 	  }
 	  if (around.size() > 0) {
 		  return around.get(0).last_connected(this);
 	  }
 	  return this;
-  }
-  
-  public int path_to_goal(Tile previous) {
-	  int path = 0;
-	  
-	  return path;
-	  
   }
 
 }

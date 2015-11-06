@@ -112,13 +112,22 @@ public class Board {
   public Tile getBallTile(){
 	for(int i = 0; i < width; i++){
 	  for(int j = 0; j < height; j++){
-	      if(grid[i][j].getType() == Tile.ball)
+	      if(grid[i][j].getType() == Tile.ball_horizontal || grid[i][j].getType() == Tile.ball_vertical)
 	    	  return grid[i][j];
 	  }
 	}
 	return null;
   }
   
+  public Tile getGoalTile(){
+	for(int i = 0; i < width; i++){
+	  for(int j = 0; j < height; j++){
+	      if(grid[i][j].getType() == Tile.goal_horizontal || grid[i][j].getType() == Tile.goal_vertical)
+	    	  return grid[i][j];
+	  }
+	}
+	return null;
+  }
   
   public void setH1Value() {
 	  int worst_case = width * height;
@@ -128,6 +137,70 @@ public class Board {
   }
   
   public void setAStarValue() {
+	  a_star_value = level + path_to_goal(getBallTile().last_connected(null), getGoalTile());
+			  //.path_to_goal(null);
+  }
+  
+  public int path_to_goal(Tile start, Tile goal) {
+	  int path;
+	  int diff_rows = goal.x - start.x;
+	  int diff_cols = goal.y - start.y;
+	  int current_x;
+	  int current_y;
+	  if (diff_rows <= 0) {
+		// up left
+		if (diff_cols <= 0) {
+			path = (0 - diff_rows) + (0 - diff_cols) - 1;
+			for (int i = start.x - 1; i > goal.x; i--) {
+				if (grid[i][start.y].possible_north() != null)
+					path -= 1;
+			}
+			for (int i = start.y; i > goal.y; i++) {
+				if (grid[goal.x][i].possible_west() != null)
+					path -= 1;
+			}
+		}
+		// up right
+		else {
+			path = (0 - diff_rows) + diff_cols - 1;
+			for (int i = start.x - 1; i > goal.x; i--) {
+				if (grid[i][start.y].possible_north() != null)
+					path -= 1;
+			}
+			for (int i = start.y; i < goal.y; i++) {
+				if (grid[goal.x][i].possible_east() != null)
+					path -= 1;
+			}
+		}
+	  }
+	  else {
+		  // down left
+		  if (diff_cols <= 0) {
+			  path = (0 - diff_rows) + (0 - diff_cols) - 1;
+			  for (int i = start.x - 1; i > goal.x; i--) {
+				  if (grid[i][start.y].possible_north() != null)
+					  path -= 1;
+			  }
+			  for (int i = start.y; i > goal.y; i++) {
+				  if (grid[goal.x][i].possible_west() != null)
+					  path -= 1;
+			  }
+			  
+		  }
+		  // down right
+		  else {
+			  path = (0 - diff_rows) + (0 - diff_cols) - 1;
+			  for (int i = start.x - 1; i > goal.x; i--) {
+				  if (grid[i][start.y].possible_north() != null)
+					  path -= 1;
+			  }
+			  for (int i = start.y; i > goal.y; i++) {
+				  if (grid[goal.x][i].possible_west() != null)
+					  path -= 1;
+			  }
+		  }
+	  }
+	  return path;
 	  
   }
   
